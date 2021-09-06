@@ -12,6 +12,8 @@ import java.util.List;
 public interface InstructorRepository extends CrudRepository<Instructor, Integer> {
     Instructor findByName(String name);
 
+    Instructor findByPhoneNumber(String phoneNumber);
+
     void deleteInstructorByName(String name);
 
     @Query("select p From PermanentInstructor p order by p.fixedSalary desc")

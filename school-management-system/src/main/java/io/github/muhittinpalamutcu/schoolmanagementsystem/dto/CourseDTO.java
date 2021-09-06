@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class CourseDTO {
     private String courseCode;
 
     @ApiModelProperty(example = "5")
-    @NotBlank(message = "Credit score is mandatory")
+    @NotNull(message = "Credit score is mandatory")
     private int creditScore;
 
     private List<StudentDTO> students = new ArrayList<>();

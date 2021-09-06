@@ -5,6 +5,8 @@ import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Course;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Instructor;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Student;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.exceptions.BadRequestException;
+import io.github.muhittinpalamutcu.schoolmanagementsystem.exceptions.CourseIsAlreadyExistException;
+import io.github.muhittinpalamutcu.schoolmanagementsystem.exceptions.StudentNumberForOneCourseExceededException;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.mappers.CourseMapper;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.CourseRepository;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.InstructorRepository;
@@ -46,8 +48,12 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public Optional<Course> save(CourseDTO courseDTO) {
+        if (courseRepository.findByCourseCode(courseDTO.getCourseCode()) != null) {
+            throw new CourseIsAlreadyExistException("Course with code " + courseDTO.getCourseCode() + " is already exists!");
+        }
+
         if (isExists(courseDTO.getId())) {
-            throw new BadRequestException("Course with id " + courseDTO.getId() + " is already exists!");
+            throw new CourseIsAlreadyExistException("Course with id " + courseDTO.getId() + " is already exists!");
         }
 
         Course course = courseMapper.mapFromCourseDTOtoCourse(courseDTO);
@@ -66,9 +72,14 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public Course update(CourseDTO courseDTO) {
+        if (courseRepository.findByCourseCode(courseDTO.getCourseCode()) != null) {
+            throw new CourseIsAlreadyExistException("Course with code " + courseDTO.getCourseCode() + " is already exists!");
+        }
+
         if (!isExists(courseDTO.getId())) {
             throw new BadRequestException("There is no course with id " + courseDTO.getId());
         }
+
         Course course = courseMapper.mapFromCourseDTOtoCourse(courseDTO);
         return courseRepository.save(course);
     }
@@ -106,9 +117,13 @@ public class CourseServiceImpl implements CourseService {
         Student student = optionalStudent.get();
 
         List<Student> students = course.getStudents();
-        students.add(student);
-        course.setStudents(students);
-        return Optional.of(courseRepository.save(course));
+        if (students.size() < 20) {
+            students.add(student);
+            course.setStudents(students);
+            return Optional.of(courseRepository.save(course));
+        } else {
+            throw new StudentNumberForOneCourseExceededException("Students number can not exceed 20 - current students number enrolled in course: " + students.size());
+        }
     }
 
     public Optional<Course> registerInstructorToCourse(String courseCode, int instructorId) {

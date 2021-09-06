@@ -3,6 +3,7 @@ package io.github.muhittinpalamutcu.schoolmanagementsystem.service;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.dto.StudentDTO;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Student;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.exceptions.BadRequestException;
+import io.github.muhittinpalamutcu.schoolmanagementsystem.exceptions.StudentAgeNotValidException;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.mappers.StudentMapper;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +43,13 @@ public class StudentServiceImpl implements StudentService {
     public Optional<Student> save(StudentDTO studentDTO) {
         if (isExists(studentDTO.getId())) {
             throw new BadRequestException("Student with id " + studentDTO.getId() + " is already exists!");
+        }
+
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int studentBirthYear = studentDTO.getBirthDate().getYear();
+
+        if (year - studentBirthYear <= 18 || year - studentBirthYear >= 40) {
+            throw new StudentAgeNotValidException("Student age can not be greater than 40 or not be less than 18");
         }
 
         Student student = studentMapper.mapFromStudentDTOtoStudent(studentDTO);

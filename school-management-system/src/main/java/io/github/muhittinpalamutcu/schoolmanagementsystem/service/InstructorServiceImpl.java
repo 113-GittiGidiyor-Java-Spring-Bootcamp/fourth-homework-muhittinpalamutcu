@@ -7,6 +7,7 @@ import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Instructor;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.PermanentInstructor;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.VisitingResearcher;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.exceptions.BadRequestException;
+import io.github.muhittinpalamutcu.schoolmanagementsystem.exceptions.InstructorIsAlreadyExistException;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.mappers.PermanentInstructorMapper;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.mappers.VisitingResearcherMapper;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.InstructorRepository;
@@ -45,6 +46,10 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     @Transactional
     public Optional<Instructor> save(InstructorDTO instructorDTO) {
+        if (instructorRepository.findByPhoneNumber(instructorDTO.getPhoneNumber()) != null) {
+            throw new InstructorIsAlreadyExistException("This phone number is already belong to another instructor info: " + instructorDTO.getPhoneNumber());
+        }
+
         if (isExists(instructorDTO.getId())) {
             throw new BadRequestException("Instructor with id " + instructorDTO.getId() + " is already exists!");
         } else {
@@ -72,6 +77,10 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     @Transactional
     public Instructor update(InstructorDTO instructorDTO) {
+        if (instructorRepository.findByPhoneNumber(instructorDTO.getPhoneNumber()) != null) {
+            throw new InstructorIsAlreadyExistException("This phone number is already belong to another instructor info: " + instructorDTO.getPhoneNumber());
+        }
+
         if (isExists(instructorDTO.getId())) {
             throw new BadRequestException("Instructor with id " + instructorDTO.getId() + " is already exists!");
         } else {
