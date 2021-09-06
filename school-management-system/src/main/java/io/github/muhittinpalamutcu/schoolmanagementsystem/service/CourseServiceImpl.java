@@ -2,10 +2,12 @@ package io.github.muhittinpalamutcu.schoolmanagementsystem.service;
 
 import io.github.muhittinpalamutcu.schoolmanagementsystem.dto.CourseDTO;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Course;
+import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Instructor;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Student;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.exceptions.BadRequestException;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.mappers.CourseMapper;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.CourseRepository;
+import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.InstructorRepository;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class CourseServiceImpl implements CourseService {
     private CourseMapper courseMapper;
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private InstructorRepository instructorRepository;
 
     @Override
     public List<Course> findAll() {
@@ -38,7 +42,6 @@ public class CourseServiceImpl implements CourseService {
         }
         return courseRepository.findById(id).get();
     }
-
 
     @Override
     @Transactional
@@ -98,7 +101,7 @@ public class CourseServiceImpl implements CourseService {
 
         Optional<Student> optionalStudent = studentRepository.findById(studentId);
         if (!optionalStudent.isPresent()) {
-            throw new BadRequestException("There is no student with id " + studentId);
+            throw new BadRequestException("There is no student with id: " + studentId);
         }
         Student student = optionalStudent.get();
 
@@ -108,7 +111,25 @@ public class CourseServiceImpl implements CourseService {
         return Optional.of(courseRepository.save(course));
     }
 
+    public Optional<Course> registerInstructorToCourse(String courseCode, int instructorId) {
+        Course course = courseRepository.findByCourseCode(courseCode);
+        if (course == null) {
+            throw new BadRequestException("There is no course with code: " + courseCode);
+        }
+
+        Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
+        if (!optionalInstructor.isPresent()) {
+            throw new BadRequestException("There is no instructor with id: " + instructorId);
+        }
+
+        Instructor instructor = optionalInstructor.get();
+        course.setInstructor(instructor);
+        return Optional.of(courseRepository.save(course));
+    }
+
     public boolean isExists(int id) {
         return courseRepository.existsById(id);
     }
+
+
 }

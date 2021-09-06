@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VisitingResearcherDTO {
+public class VisitingResearcherDTO extends InstructorDTO {
     @ApiModelProperty(example = "5000")
     @NotNull(message = "Salary is mandatory")
     @NumberFormat(style = NumberFormat.Style.NUMBER)

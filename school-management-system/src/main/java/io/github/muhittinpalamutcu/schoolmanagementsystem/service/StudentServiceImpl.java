@@ -4,7 +4,6 @@ import io.github.muhittinpalamutcu.schoolmanagementsystem.dto.StudentDTO;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Student;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.exceptions.BadRequestException;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.mappers.StudentMapper;
-import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.CourseRepository;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private StudentMapper studentMapper;
-
-    @Autowired
-    private CourseRepository courseRepository;
 
     @Override
     public List<Student> findAll() {
@@ -64,7 +60,7 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public Student update(StudentDTO studentDTO) {
         if (!isExists(studentDTO.getId())) {
-            throw new BadRequestException("There is no student with id " + studentDTO.getId());
+            throw new BadRequestException("There is no student with id: " + studentDTO.getId());
         }
         Student student = studentMapper.mapFromStudentDTOtoStudent(studentDTO);
         return studentRepository.save(student);

@@ -86,8 +86,17 @@ public class CourseController {
     // @route Get /api/courses/register-student/{course-code}
     //@access Public
     @PatchMapping("/courses/register-student/{courseCode}")
-    public ResponseEntity<Course> enrollInCourse(@PathVariable String courseCode, @RequestBody int studentId) {
+    public ResponseEntity<Course> registerStudentToCourse(@PathVariable String courseCode, @RequestBody int studentId) {
         Optional<Course> course = courseService.registerStudentToCourse(courseCode, studentId);
+        return course.isPresent() ? new ResponseEntity<>(course.get(), HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    // @desc Register instructor to a course
+    // @route Get /api/courses/register-student/{course-code}
+    //@access Public
+    @PatchMapping("/courses/register-instructor/{courseCode}")
+    public ResponseEntity<Course> registerInstructorToCourse(@PathVariable String courseCode, @RequestBody int instructorId) {
+        Optional<Course> course = courseService.registerInstructorToCourse(courseCode, instructorId);
         return course.isPresent() ? new ResponseEntity<>(course.get(), HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
