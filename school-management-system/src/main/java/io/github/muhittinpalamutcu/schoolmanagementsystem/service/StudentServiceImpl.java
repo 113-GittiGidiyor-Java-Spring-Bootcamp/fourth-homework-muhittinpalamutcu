@@ -4,6 +4,7 @@ import io.github.muhittinpalamutcu.schoolmanagementsystem.dto.StudentDTO;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Student;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.exceptions.BadRequestException;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.mappers.StudentMapper;
+import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.CourseRepository;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
 
+    @Autowired
+    private CourseRepository courseRepository;
+
     @Override
     public List<Student> findAll() {
         return (List<Student>) studentRepository.findAll();
@@ -30,15 +34,16 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findById(int id) {
+        if (!isExists(id)) {
+            throw new BadRequestException("There is no student with id: " + id);
+        }
         return studentRepository.findById(id).get();
     }
 
     @Override
     @Transactional
     public Optional<Student> save(StudentDTO studentDTO) {
-        boolean isExists = studentRepository.existsById(studentDTO.getId());
-
-        if (isExists) {
+        if (isExists(studentDTO.getId())) {
             throw new BadRequestException("Student with id " + studentDTO.getId() + " is already exists!");
         }
 
@@ -49,25 +54,28 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void deleteById(int id) {
-
-        boolean isExists = studentRepository.existsById(id);
-
-        if (!isExists) {
-            throw new BadRequestException("There is no student with id " + id);
+        if (!isExists(id)) {
+            throw new BadRequestException("There is no student with id: " + id);
         }
-
-        studentRepository.deleteById(id) ;
+        studentRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public Student update(StudentDTO studentDTO) {
+        if (!isExists(studentDTO.getId())) {
+            throw new BadRequestException("There is no student with id " + studentDTO.getId());
+        }
         Student student = studentMapper.mapFromStudentDTOtoStudent(studentDTO);
         return studentRepository.save(student);
     }
 
     @Override
     public Student findByName(String name) {
+        Student student = studentRepository.findByName(name);
+        if (student == null) {
+            throw new BadRequestException("There is no student with name: " + name);
+        }
         return studentRepository.findByName(name);
     }
 
@@ -78,6 +86,15 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void deleteByName(String name) {
+        Student student = studentRepository.findByName(name);
+        if (student == null) {
+            throw new BadRequestException("There is no student with name: " + name);
+        }
+
         studentRepository.deleteStudentByName(name);
+    }
+
+    public boolean isExists(int id) {
+        return studentRepository.existsById(id);
     }
 }

@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface CourseRepository extends CrudRepository<Course, Integer> {
     Course findByName(String name);
     void deleteCourseByName(String name);
+    Course findByCourseCode(String courseCode);
 }

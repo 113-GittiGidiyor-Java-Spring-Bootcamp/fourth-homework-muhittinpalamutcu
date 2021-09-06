@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,8 @@ public class StudentDTO {
     @NotBlank(message = "Address is mandatory")
     private String address;
 
-    //@ApiModelProperty(example = )
-    @NotBlank(message = "BirthDate is mandatory")
+    @ApiModelProperty(example ="1998-01-13" )
+    @NotNull(message = "BirthDate is mandatory")
     private LocalDate birthDate;
 
     @ApiModelProperty(example = "MALE")

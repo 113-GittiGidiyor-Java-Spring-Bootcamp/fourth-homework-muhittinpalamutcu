@@ -48,6 +48,14 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    // @desc Update a student
+    // @route Put /api/students
+    // @access Public
+    @PutMapping("/students")
+    public Student updateStudent(@RequestBody StudentDTO studentDTO) {
+        return studentService.update(studentDTO);
+    }
+
     // @desc Delete student by id
     // @route Delete /api/students/{id}
     // @access Public
@@ -57,5 +65,39 @@ public class StudentController {
         return "Student deleted...";
     }
 
+    // @desc Get student by name
+    // @route Get /api/students/getByName/{name}
+    // @access Public
+    @GetMapping("/students/getByName/{name}")
+    public Student findByName(@PathVariable String name) {
+        return studentService.findByName(name);
+    }
+
+    // @desc Get student gender with grouping
+    // @route Get /students/getGenderWithGrouping
+    // @access Public
+    @GetMapping("/students/getGenderWithGrouping")
+    public List<?> getGenderWithGrouping() {
+        return studentService.getGenderWithGrouping();
+    }
+
+    // @desc Delete student by name
+    // @route Get /api/students/deleteByName/{name}
+    // @access Public
+    @DeleteMapping("/students/deleteByName/{name}")
+    public String deleteStudentByName(@PathVariable String name) {
+        studentService.deleteByName(name);
+        return "Student deleted...";
+    }
+
+    /*
+    // @desc Enroll in course
+    // @route Get /api/students/enroll/{course-code}
+    //@access Public
+    @GetMapping("/students/enroll/{studentId}/{courseCode}")
+    public ResponseEntity<Student> enrollInCourse(@PathVariable int studentId, @PathVariable String courseCode) {
+        Optional<Student> student = studentService.enrollInCourse(studentId, courseCode);
+        return student.isPresent() ? new ResponseEntity<>(student.get(), HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }*/
 
 }
