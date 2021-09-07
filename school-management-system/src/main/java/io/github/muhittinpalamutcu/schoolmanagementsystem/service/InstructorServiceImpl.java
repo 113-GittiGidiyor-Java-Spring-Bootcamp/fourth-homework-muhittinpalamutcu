@@ -30,11 +30,24 @@ public class InstructorServiceImpl implements InstructorService {
     @Autowired
     private VisitingResearcherMapper visitingResearcherMapper;
 
+    /**
+     * This method return all the instructors exist in the database.
+     *
+     * @return List<Instructor>
+     */
     @Override
     public List<Instructor> findAll() {
         return (List<Instructor>) instructorRepository.findAll();
     }
 
+    /**
+     * This method return instructor by id.
+     *
+     * @param id
+     * @return Instructor
+     * @throws BadRequestException if instructor doesn't exist in db.
+     * @see BadRequestException
+     */
     @Override
     public Instructor findById(int id) {
         if (!isExists(id)) {
@@ -43,6 +56,14 @@ public class InstructorServiceImpl implements InstructorService {
         return instructorRepository.findById(id).get();
     }
 
+    /**
+     * This method save instructor to database.
+     *
+     * @param instructorDTO
+     * @return Instructor
+     * @throws InstructorIsAlreadyExistException if input instructor is already exist in db.
+     * @see InstructorIsAlreadyExistException
+     */
     @Override
     @Transactional
     public Optional<Instructor> save(InstructorDTO instructorDTO) {
@@ -65,6 +86,13 @@ public class InstructorServiceImpl implements InstructorService {
         }
     }
 
+    /**
+     * This method delete instructor by id.
+     *
+     * @param id
+     * @throws BadRequestException if instructor doesn't exist in db.
+     * @see BadRequestException
+     */
     @Override
     @Transactional
     public void deleteById(int id) {
@@ -74,6 +102,14 @@ public class InstructorServiceImpl implements InstructorService {
         instructorRepository.deleteById(id);
     }
 
+    /**
+     * This method update existed Instructor.
+     *
+     * @param instructorDTO
+     * @return Instructor
+     * @throws BadRequestException if instructor doesn't exist in db.
+     * @see BadRequestException
+     */
     @Override
     @Transactional
     public Instructor update(InstructorDTO instructorDTO) {
@@ -92,6 +128,14 @@ public class InstructorServiceImpl implements InstructorService {
         }
     }
 
+    /**
+     * This method return instructor by name.
+     *
+     * @param name
+     * @return Instructor
+     * @throws BadRequestException if instructor doesn't exist in db.
+     * @see BadRequestException
+     */
     @Override
     public Instructor findByName(String name) {
         Instructor instructor = instructorRepository.findByName(name);
@@ -101,6 +145,13 @@ public class InstructorServiceImpl implements InstructorService {
         return instructorRepository.findByName(name);
     }
 
+    /**
+     * This method delete instructor by name.
+     *
+     * @param name
+     * @throws BadRequestException if instructor doesn't exist in db.
+     * @see BadRequestException
+     */
     @Override
     @Transactional
     public void deleteByName(String name) {
@@ -111,6 +162,12 @@ public class InstructorServiceImpl implements InstructorService {
         instructorRepository.deleteInstructorByName(name);
     }
 
+    /**
+     * This method check if instructor exist in db.
+     *
+     * @param id
+     * @return boolean
+     */
     public boolean isExists(int id) {
         return instructorRepository.existsById(id);
     }

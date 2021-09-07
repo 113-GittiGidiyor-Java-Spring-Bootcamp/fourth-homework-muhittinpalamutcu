@@ -17,19 +17,43 @@ public class ErrorDetailService {
     @Autowired
     private ErrorDetailRepository errorDetailRepository;
 
+    /**
+     * This method return all the errors exist in the database.
+     *
+     * @param "args Unused."
+     * @return List<ErrorDetail>
+     */
     public List<ErrorDetail> findAll() {
         return (List<ErrorDetail>) errorDetailRepository.findAll();
     }
 
+    /**
+     * This method save errorDetail to database.
+     *
+     * @param errorDetail
+     * @return ErrorDetail
+     */
     @Transactional
     public ErrorDetail save(ErrorDetail errorDetail) {
         return errorDetailRepository.save(errorDetail);
     }
 
+    /**
+     * This method return errorDetail list that are filtered by exception name.
+     *
+     * @param exception
+     * @return List<ErrorDetail>
+     */
     public List<ErrorDetail> findByException(String exception) {
         return errorDetailRepository.findByException(exception);
     }
 
+    /**
+     * This method return errorDetail list that are filtered by date.
+     *
+     * @param localDate
+     * @return List<ErrorDetail>
+     */
     public List<ErrorDetail> findByLocalDate(LocalDate localDate) {
         return errorDetailRepository.findByLocalDate(localDate);
     }

@@ -25,11 +25,24 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
 
+    /**
+     * This method return all the students exist in the database.
+     *
+     * @return List<Student>
+     */
     @Override
     public List<Student> findAll() {
         return (List<Student>) studentRepository.findAll();
     }
 
+    /**
+     * This method return student by id.
+     *
+     * @param id
+     * @return Student
+     * @throws BadRequestException if student doesn't exist in the db.
+     * @see BadRequestException
+     */
     @Override
     public Student findById(int id) {
         if (!isExists(id)) {
@@ -38,6 +51,16 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findById(id).get();
     }
 
+    /**
+     * This method save student to database.
+     *
+     * @param studentDTO
+     * @return Student
+     * @throws BadRequestException         if student already exist in the db.
+     * @throws StudentAgeNotValidException if student age greater than 40 or less than 18
+     * @see BadRequestException
+     * @see StudentAgeNotValidException
+     */
     @Override
     @Transactional
     public Optional<Student> save(StudentDTO studentDTO) {
@@ -56,6 +79,13 @@ public class StudentServiceImpl implements StudentService {
         return Optional.of(studentRepository.save(student));
     }
 
+    /**
+     * This method delete student by id.
+     *
+     * @param id
+     * @throws BadRequestException if student doesn't exist in db.
+     * @see BadRequestException
+     */
     @Override
     @Transactional
     public void deleteById(int id) {
@@ -65,6 +95,14 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.deleteById(id);
     }
 
+    /**
+     * This method update existed Student.
+     *
+     * @param studentDTO
+     * @return Student
+     * @throws BadRequestException if student doesn't exist in db.
+     * @see BadRequestException
+     */
     @Override
     @Transactional
     public Student update(StudentDTO studentDTO) {
@@ -75,6 +113,14 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.save(student);
     }
 
+    /**
+     * This method return a student by name
+     *
+     * @param name
+     * @return Student
+     * @throws BadRequestException if student doesn't exist in db.
+     * @see BadRequestException
+     */
     @Override
     public Student findByName(String name) {
         Student student = studentRepository.findByName(name);
@@ -84,10 +130,23 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findByName(name);
     }
 
+    /**
+     * This method return student gender with grouping.
+     *
+     * @param "args Unused."
+     * @return List
+     */
     public List<?> getGenderWithGrouping() {
         return studentRepository.getGenderWithGrouping();
     }
 
+    /**
+     * This method delete student by name
+     *
+     * @param name
+     * @throws BadRequestException if student doesn't exist in db.
+     * @see BadRequestException
+     */
     @Override
     @Transactional
     public void deleteByName(String name) {
@@ -99,6 +158,12 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.deleteStudentByName(name);
     }
 
+    /**
+     * This method check if course exist in db.
+     *
+     * @param id
+     * @return boolean
+     */
     public boolean isExists(int id) {
         return studentRepository.existsById(id);
     }
