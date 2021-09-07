@@ -89,15 +89,4 @@ public class StudentController {
         studentService.deleteByName(name);
         return "Student deleted...";
     }
-
-    /*
-    // @desc Enroll in course
-    // @route Get /api/students/enroll/{course-code}
-    //@access Public
-    @GetMapping("/students/enroll/{studentId}/{courseCode}")
-    public ResponseEntity<Student> enrollInCourse(@PathVariable int studentId, @PathVariable String courseCode) {
-        Optional<Student> student = studentService.enrollInCourse(studentId, courseCode);
-        return student.isPresent() ? new ResponseEntity<>(student.get(), HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }*/
-
 }
