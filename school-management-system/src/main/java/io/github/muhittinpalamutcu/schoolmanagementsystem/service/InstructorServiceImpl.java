@@ -77,12 +77,8 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     @Transactional
     public Instructor update(InstructorDTO instructorDTO) {
-        if (instructorRepository.findByPhoneNumber(instructorDTO.getPhoneNumber()) != null) {
-            throw new InstructorIsAlreadyExistException("This phone number is already belong to another instructor info: " + instructorDTO.getPhoneNumber());
-        }
-
-        if (isExists(instructorDTO.getId())) {
-            throw new BadRequestException("Instructor with id " + instructorDTO.getId() + " is already exists!");
+        if (!isExists(instructorDTO.getId())) {
+            throw new BadRequestException("There is no instructor with id: " + instructorDTO.getId());
         } else {
             if (instructorDTO instanceof PermanentInstructorDTO) {
                 PermanentInstructor permanentInstructor = permanentInstructorMapper.mapFromPermanentInstructorDTOtoPermanentInstructor((PermanentInstructorDTO) instructorDTO);

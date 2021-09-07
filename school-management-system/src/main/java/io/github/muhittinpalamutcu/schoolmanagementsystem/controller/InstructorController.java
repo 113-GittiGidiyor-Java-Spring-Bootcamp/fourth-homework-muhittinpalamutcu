@@ -1,6 +1,5 @@
 package io.github.muhittinpalamutcu.schoolmanagementsystem.controller;
 
-import io.github.muhittinpalamutcu.schoolmanagementsystem.dto.InstructorDTO;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.dto.PermanentInstructorDTO;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.dto.VisitingResearcherDTO;
 import io.github.muhittinpalamutcu.schoolmanagementsystem.entity.Instructor;
@@ -63,12 +62,21 @@ public class InstructorController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    // @desc Update a instructor
-    // @route Put /api/instructors
+
+    // @desc Update permanent instructor
+    // @route Put /api/instructors/save-permanent-instructor
     // @access Public
-    @PutMapping("/instructors")
-    public Instructor updateInstructor(@RequestBody InstructorDTO instructorDTO) {
-        return instructorService.update(instructorDTO);
+    @PutMapping("/instructors/update-permanent-instructor")
+    public Instructor updatePermanentInstructor(@RequestBody @Valid PermanentInstructorDTO permanentInstructorDTO) {
+        return instructorService.update(permanentInstructorDTO);
+    }
+
+    // @desc Update visiting researcher
+    // @route Put /api/instructors/save-permanent-instructor
+    // @access Public
+    @PutMapping("/instructors/update-visiting-researcher")
+    public Instructor updateVisitingResearcher(@RequestBody @Valid VisitingResearcherDTO visitingResearcherDTO) {
+        return instructorService.update(visitingResearcherDTO);
     }
 
     // @desc Delete instructor by id

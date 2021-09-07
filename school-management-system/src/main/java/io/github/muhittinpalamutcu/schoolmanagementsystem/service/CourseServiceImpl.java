@@ -72,14 +72,9 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public Course update(CourseDTO courseDTO) {
-        if (courseRepository.findByCourseCode(courseDTO.getCourseCode()) != null) {
-            throw new CourseIsAlreadyExistException("Course with code " + courseDTO.getCourseCode() + " is already exists!");
-        }
-
         if (!isExists(courseDTO.getId())) {
             throw new BadRequestException("There is no course with id " + courseDTO.getId());
         }
-
         Course course = courseMapper.mapFromCourseDTOtoCourse(courseDTO);
         return courseRepository.save(course);
     }
