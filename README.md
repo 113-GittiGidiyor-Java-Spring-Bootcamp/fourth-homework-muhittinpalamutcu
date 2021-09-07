@@ -71,7 +71,7 @@ These endpoints allow a user to handle student CRUD operations.
 ---
 
 ### 2- Course API endpoints
-These endpoints allow a user to handle course CRUD operations as well as allow instructor register and student registry through to course.
+These endpoints allow a user to handle course CRUD operations as well as allow instructor registry and student registry through to course.
 
 #### - GET
 ```bash
